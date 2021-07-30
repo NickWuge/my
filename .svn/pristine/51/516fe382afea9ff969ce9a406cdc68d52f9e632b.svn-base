@@ -1,0 +1,27 @@
+APPNAME=my
+LIBDIRNAME=libmy
+
+EXTRA_LDFLAGS= -lvlibmemoryclient -lsvm -lvppinfra -lvlib -lvatplugin \
+		-lpthread -lubus -lubox -lblobmsg_json -ljson-c -lhiredis -lentity -lentitybase -loir -lsm -lmisc -lvpp_sapi -lsys -lres
+	
+SUBDIRS	=
+OBJS    = my.o my1_6.o \
+	my7.o \
+	my8.o \
+	my9.o \
+	my10.o \
+	my11.o \
+	my12.o \
+	my15.o \
+	my16.o \
+	my17.o \
+	my18.o \
+	my19.o \
+	my20.o \
+	my21.o \
+	my22.o \
+	my23.o \
+	my24.o
+include $(SWITCH_BASE)/configs/rules.app
+
+CC_OPTIM=

@@ -1,0 +1,146 @@
+#define _GNU_SOURCE
+#include <sched.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <sys/prctl.h>
+#include <semaphore.h>
+#include <sys/mman.h>
+#include <sys/msg.h>
+#include <fcntl.h>
+#include <sys/errno.h>
+#include <arpa/inet.h>	/*inet_addr*/
+#include <libubox/uloop.h>
+#include <libubox/ustream.h>
+#include <libubox/utils.h>
+#include <libubus.h>
+#include <json-c/json.h>
+#include <libubox/blobmsg_json.h>
+#include <vpp_sapi.h>
+
+extern int my1();
+extern int my2();
+extern int my3();
+extern int my4();
+extern int my5();
+extern int my6();
+extern int my7();
+extern int my8();
+extern int my9();
+extern int my10();
+extern int my11();
+extern int my12();
+extern void my15();
+extern int my16();
+extern int my17();
+extern int my18();
+extern int my19();
+extern int my20();
+extern int my21();
+extern int my22();
+extern int my23();
+extern int my24();
+
+/*
+git clone https://github.com/json-c/json-c.git
+cd json-c
+sh autogen.sh
+./configure  # --enable-threading
+make
+make install
+make check
+make USE_VALGRIND=0 check   # optionally skip using valgrind
+
+git clone http://git.openwrt.org/project/libubox.git
+cmake -D CMAKE_INSTALL_PREFIX=/usr ./
+make
+sudo make install
+
+git clone git://nbd.name/luci2/ubus.git
+SET(UBUS_MAX_MSGLEN 4194304)
+cmake -D CMAKE_INSTALL_PREFIX=/usr ./
+make
+sudo make install
+
+*/
+int main(int argc,char *argv[]){
+	if(argc < 2)
+		return 0;
+	
+	if(strcmp(argv[1], "1") == 0){
+		/*测试gdb解析进程异常、回溯栈桢*/
+		return my1();
+	}else if(strcmp(argv[1], "2") == 0){
+		/*测试valgrind检测内存泄漏*/
+		return my2();
+	}else if(strcmp(argv[1], "3") == 0){
+		/*测试valgrind检测重释放，重释放会产生core dump*/
+		return my3();
+	}else if(strcmp(argv[1], "4") == 0){
+		/*测试valgrind检测访问越界*/
+		return my4();		
+	}else if(strcmp(argv[1], "5") == 0){
+		/*测试valgrind检测使用未初始化的内存*/
+		return my5();
+	}else if(strcmp(argv[1], "6") == 0){
+		/*测试valgrind检测使用已经被释放的内存*/
+		return my6();
+	}else if(strcmp(argv[1], "7") == 0){
+		/*测试线程的CPU亲核性*/
+		return my7();
+	}else if(strcmp(argv[1], "8") == 0){
+		/*测试进程用Cgroup流控*/
+		return my8();
+	}else if(strcmp(argv[1], "9") == 0){
+		/*测试进程间报文交互*/
+		return my9();
+	}else if(strcmp(argv[1], "10") == 0){
+		/*测试systemV消息队列*/
+		return my10();
+	}else if(strcmp(argv[1], "11") == 0){
+		/*测试ubus的object和invoke*/
+		return my11();
+	}else if(strcmp(argv[1], "12") == 0){
+		/*测试ubus的subscribe和notify*/
+		return my12();
+	}else if(strcmp(argv[1], "14") == 0){
+		/*本地对象管理demo，监控温度设置风扇*/
+		return 0;	/*接口调整后已删除*/
+	}else if(strcmp(argv[1], "15") == 0){
+		/*测试radis数据库*/
+		my15();
+		return 0;
+	}else if(strcmp(argv[1], "16") == 0){
+		/*机框对象管理demo，监控线卡温度设置机框风扇，支持分对象的有序主备同步*/
+		/*测试vtysh，及收集配置、保存配置、加载配置（不支持分布式）*/
+		return my16();
+	}else if(strcmp(argv[1], "17") == 0){
+		/*测试blob嵌套*/
+		return my17();
+	}else if(strcmp(argv[1], "18") == 0){
+		/*测试读写锁加共享内存*/
+		return my18();
+	}else if(strcmp(argv[1], "19") == 0){
+		/*测试共享hash*/
+		return my19();
+	}else if(strcmp(argv[1], "20") == 0){
+		/*测试用户态收发报文时上层协议及应用通过标准socket进行2、3、4层报文单播、广播、组播收发*/
+		return my20();
+	}else if(strcmp(argv[1], "21") == 0){
+		/*测试VPP作为用户态协议栈时，上层协议及应用通过标准socket进行2、3、4层报文单播收发*/
+		return my21();
+	}else if(strcmp(argv[1], "22") == 0){
+		/*测试libsys定时器*/
+		return my22();
+	}else if(strcmp(argv[1], "23") == 0){
+		/*测试Posix消息队列*/
+		return my23();
+	}
+	else if(strcmp(argv[1], "24") == 0){
+		/*测试资源同步libres*/
+		return my24();
+	}
+	
+	return 0;
+}
